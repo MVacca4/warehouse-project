@@ -1,7 +1,9 @@
 package warehouse.app;
-import java.util.Scanner;
+import java.util.*;
 
 public class Warehouse {
+	
+	static List<Employee> employeeData = new ArrayList<Employee>();
 	
 	public static void main(String[] args) {
 		
@@ -56,7 +58,8 @@ public class Warehouse {
 			hours = Float.parseFloat(sc.nextLine());
 		} catch (NumberFormatException e) {hours = 0;} // Assign default value of 0.
 		
-		Employee employeePartialInfo = new Employee(name, position, salary, hours);
+		Employee employeeInfo = new Employee(name, position, salary, hours);
+		employeeData.add(employeeInfo);
 		System.out.println("Employee entry created!");
 	}
 	
