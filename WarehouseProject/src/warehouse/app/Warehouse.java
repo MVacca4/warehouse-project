@@ -3,12 +3,12 @@ import java.util.Scanner;
 
 public class Warehouse {
 	
-	static Scanner sc = new Scanner(System.in);
-	
 	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
 		int choice = 0;
 		
-		System.out.print("Welcome to the warehouse database system.");
+		System.out.print("Welcome to the warehouse database system. ");
 		System.out.println("Please type the corresponding number of your choice and hit enter:\n");
 		System.out.println("1. Create new employee");
 		System.out.println("2. Delete existing employee");
@@ -29,24 +29,35 @@ public class Warehouse {
 		}
 		
 		// Continue figuring out logic from here.
-		
-		sc.close();
 	}
 	
 	public static void createEmployee() {
 		
-		System.out.println("Do you currently have the name, position, salary, and hours for the employee? (y/n)");
-		String choice = sc.nextLine();
+		Scanner sc = new Scanner(System.in);
+		String choice = "";
+		String name = "";
+		String position = "";
+		int salary = 0;
+		float hours = 0;
+	
+		System.out.println("Fill in the following questions, if the answer is unknown leave the field blank.");
+		System.out.print("Enter employee's name: ");
+		name = sc.nextLine();
+		System.out.print("Enter employee's position: ");
+		position = sc.nextLine();
 		
-		if (choice.equals("y")) {
-			System.out.println("Enter employee info in the format 'Name, Position, Salary, Hours' including commas.");
-			System.out.println("Example: Tom Harris, CEO, 200000, 40");
-			String tempHold = sc.nextLine();
-			String[] words = tempHold.split("\\W+");
-			Employee employee = new Employee(words[0], words[1], Integer.parseInt(words[2]), Integer.parseInt(words[3]));
-		} else {
-			// Continue employee creation with partial data here.
-		}
+		// User entered nothing for salary or hours.
+		try {
+			System.out.print("Enter employee's salary, no spaces, no commas: ");
+			salary = Integer.parseInt(sc.nextLine());
+		} catch (NumberFormatException e) {salary = 0;} // Assign default value of 0.
+		try {
+			System.out.print("Enter employee's hours: ");
+			hours = Float.parseFloat(sc.nextLine());
+		} catch (NumberFormatException e) {hours = 0;} // Assign default value of 0.
+		
+		Employee employeePartialInfo = new Employee(name, position, salary, hours);
+		System.out.println("Employee entry created!");
 	}
 	
 	public static void deleteEmployee() {
