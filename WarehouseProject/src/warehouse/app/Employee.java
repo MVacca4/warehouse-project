@@ -5,9 +5,9 @@ public class Employee {
 	String name = "";
 	String position = "";
 	int salary = 0;
-	int hours = 0;
+	float hours = 0;
 	
-	public Employee(String name, String position, int salary, int hours) {
+	public Employee(String name, String position, int salary, float hours) {
 		this.name = name;
 		this.position = position;
 		this.salary = salary;
@@ -32,10 +32,10 @@ public class Employee {
 	public void setSalary(int salary) {
 		this.salary = salary;
 	}
-	public int getHours() {
+	public float getHours() {
 		return hours;
 	}
-	public void setHours(int hours) {
+	public void setHours(float hours) {
 		this.hours = hours;
 	}
 	
