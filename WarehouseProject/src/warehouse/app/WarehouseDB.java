@@ -34,4 +34,21 @@ public class WarehouseDB {
 			System.err.println(e.getMessage());
 		}
 	}
+	
+	public void deleteEmployee(String name) {
+		
+		try {
+			
+			String query = "delete from employees where name = ?";
+			PreparedStatement prepStmt = connect.prepareStatement(query);
+			prepStmt.setString(1, name);
+			
+			prepStmt.execute();
+			
+			connect.close();
+			
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
 }
