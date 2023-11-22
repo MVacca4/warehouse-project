@@ -1,3 +1,5 @@
+package warehouse.app;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -102,6 +104,27 @@ public class Warehouse {
 								System.out.println("Sorry, that employee name doesn't match any in our records. Please ensure you entered the name correctly.\n");
 								wait(1500);
 							}
+		boolean end = false;
+		
+		while (end == false) {
+			
+			System.out.println("Enter the name of the employee you wish to delete, or enter 0 to go back to the main menu: ");
+			name = sc.nextLine();
+			
+			try {
+				if (Integer.parseInt(name) == 0) {end = true;} // If user entered 0, end while loop.
+			} catch (NumberFormatException e) {
+				// Loop through all employee entries and delete an entry if it matches the name typed.
+				for (int i = 0; i < employeeData.size(); i++) {
+					if (name.equalsIgnoreCase(employeeData.get(i).name)) {
+						employeeData.remove(i);
+						System.out.println("Employee entry has been deleted!\n--------------------------------");
+						wait(1500);
+						break;
+					} else {
+						if (i == employeeData.size() - 1) {	// Display message if loop has gotten to last employee entry.
+							System.out.println("Sorry, that employee name doesn't match any in our records. Please ensure you entered the name correctly.\n");
+							wait(1500);
 						}
 					}
 				}
