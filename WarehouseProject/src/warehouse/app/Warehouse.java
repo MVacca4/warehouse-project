@@ -1,26 +1,33 @@
 package warehouse.app;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * The base class for the Warehouse management program.
+ * @author Massimiliano Vacca
+ **/ 
 public class Warehouse {
 	
-	String name = "";
-	Scanner sc = new Scanner(System.in);
-	List<Employee> employeeData = new ArrayList<Employee>();
+	String name = ""; 						// Used when an employee's name is needed in methods.
+	Scanner sc = new Scanner(System.in); 				// Takes user input.
+	List<Employee> employeeData = new ArrayList<Employee>();	// Container for holding employee data.
 	
 	public static void main(String[] args) {
 		
-		Warehouse wh = new Warehouse();
-		boolean end = false; // False keeps program running, true ends program.
+		Warehouse wh = new Warehouse();				// Warehouse object to call methods with.
+		boolean end = false; 					// False keeps program running, true ends program.
 		
+		// Main menu loop, continues until the user enters 0, ending the program.
 		while (end == false) {
 		
 			Scanner mainSc = new Scanner(System.in);
-			int choice = 0;
-			wh.optionDisplay();
-			choice = mainSc.nextInt();
+			int choice = 0;					// Holds choice for main menu.
+			wh.optionDisplay();				// Display main menu options.
+			choice = mainSc.nextInt();			// Get choice selection from user.
 			
+			// Call method based on which choice the user made, or end the program if 0 was selected.
 			switch (choice) {
 				case 0:
 					end = true;
@@ -41,6 +48,7 @@ public class Warehouse {
 	
 	public void createEmployee() {
 		
+		sc = new Scanner(System.in);
 		int salary = 0;
 		float hours = 0;
 	
@@ -68,6 +76,34 @@ public class Warehouse {
 	
 	public void deleteEmployee() {
 		
+		sc = new Scanner(System.in);
+		boolean end = false;
+		
+		while (end == false) {
+
+			if (employeeData.size() == 0) {
+				System.out.println("The employee list currently has no entries. Returning you to the main menu.\n--------------------------------");
+				end = true;
+				wait(1500);
+			} else {
+				System.out.println("Enter the name of the employee you wish to delete, or enter 0 to go back to the main menu: ");
+				name = sc.nextLine();
+				
+				try {
+					if (Integer.parseInt(name) == 0) {end = true;} // If user entered 0, end while loop.
+				} catch (NumberFormatException e) {
+					// Loop through all employee entries and delete an entry if it matches the name typed.
+					for (int i = 0; i < employeeData.size(); i++) {
+						if (name.equalsIgnoreCase(employeeData.get(i).name)) {
+							employeeData.remove(i);
+							System.out.println("Employee entry has been deleted!\n--------------------------------");
+							wait(1500);
+							break;
+						} else {
+							if (i == employeeData.size() - 1) {	// Display message if loop has gotten to last employee entry.
+								System.out.println("Sorry, that employee name doesn't match any in our records. Please ensure you entered the name correctly.\n");
+								wait(1500);
+							}
 		boolean end = false;
 		
 		while (end == false) {
@@ -98,6 +134,7 @@ public class Warehouse {
 	
 	public void viewEmployee() {
 		
+		sc = new Scanner(System.in);
 		boolean end = false;
 		Scanner detectEnter = new Scanner(System.in);
 		
@@ -132,7 +169,9 @@ public class Warehouse {
 						}
 					}
 				} catch (Exception e) {
-					System.out.println("Invalid entry, please use numbers only");	// THIS IS BROKEN, FIX FIRST BEFORE DOING ANYTHING ELSE
+					System.out.println("Invalid entry, please use numbers only\n--------------------------------");
+					sc = new Scanner(System.in);
+					wait(1500);
 				}
 			}
 		}
