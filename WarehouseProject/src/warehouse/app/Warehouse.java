@@ -119,17 +119,21 @@ public class Warehouse {
 	public void viewEmployee() {
 		
 		sc = new Scanner(System.in);
-		boolean end = false;
+		boolean end = false; // For ending main while loop and going back to the main menu.
+		// For ending while loop when user has to select between seeing list of employees or choosing to update the currently selected user.
+		boolean listUpdate = false;
 		Scanner detectEnter = new Scanner(System.in);
 		
 		if (employeeData.size() == 0) {
 			System.out.println("There are no existing employee entries, returning you to the main menu.");
-			System.out.println("--------------------------------");
+			dashes();
 			wait(2000);
 		} else {
 			while (end == false) {
 				System.out.println("Choose between 1 and " + employeeData.size() + " to see information for the corresdponding employee:");
 				wait(1500);
+
+				// FIGURE OUT WHY LOOP REPEATS AFTER AN ENTRY HAS BEEN UPDATED.
 				
 				for (int i = 0; i < employeeData.size(); i++) {
 					System.out.println(i + 1 + ". " + employeeData.get(i).name);
@@ -139,21 +143,35 @@ public class Warehouse {
 					System.out.println("Enter 0 to go back to the main menu.");
 					int choice = sc.nextInt();
 					
-					if (choice == 0) {
-						end = true;
-					}
+					if (choice == 0) {end = true;}
 					
 					for (int i = 0; i < employeeData.size(); i++) {
 						if (choice == 1 + employeeData.indexOf(employeeData.get(i))) {
 							System.out.println("Name: " + employeeData.get(i).name + "\nPosition: " + employeeData.get(i).position
 									+ "\nSalary: " + employeeData.get(i).salary + "\nHours: " + employeeData.get(i).hours);
 							wait(1500);
-							System.out.println("\nHit enter to see the list of employees again.");
-							if (detectEnter.hasNextLine()) {String s = detectEnter.nextLine();} // Detects enter key press.
+
+							while (listUpdate == false) {
+								System.out.println("\nEnter 0 to see the list of employees again, or 1 if you would like to update "
+								+ "this employee's information: ");
+								choice = sc.nextInt();
+
+								if (choice == 0) {
+									listUpdate = true; // Set to true so while loop ends.
+								} else if (choice == 1) {
+									updateEmployee(i); // Call updateEmployee with index of currently selected entry.
+									listUpdate = true;
+									wait(2000);
+								} else {
+									System.out.println("Invalid entry. Enter only 0 or 1.");
+									wait(1000);
+								}
+							}
 						}
 					}
 				} catch (Exception e) {
-					System.out.println("Invalid entry, please use numbers only\n--------------------------------");
+					System.out.println("Invalid entry, please use numbers only.");
+					dashes();
 					sc = new Scanner(System.in);
 					wait(1500);
 				}
