@@ -178,6 +178,59 @@ public class Warehouse {
 			}
 		}
 	}
+
+	public void updateEmployee(int index) {
+
+		Scanner sc = new Scanner(System.in);
+		boolean updateLoop = false;
+		int choice;
+
+		while (updateLoop == false) {
+			System.out.println("\nEnter the number that corresponds with the field you would like to update.\n");
+			System.out.println("1. Name");
+			System.out.println("2. Position");
+			System.out.println("3. Salary");
+			System.out.println("4. Hours");
+			choice = sc.nextInt();
+			sc.nextLine();
+
+			try {
+
+				switch (choice) {
+					case 1:
+						System.out.println("Please enter the new name you would like for this entry: ");
+						employeeData.get(index).name = sc.nextLine();
+						updateLoop = true;
+						break;
+					case 2:
+						System.out.println("Please enter the new position you would like for this entry: ");
+						employeeData.get(index).position = sc.nextLine();
+						updateLoop = true;
+						break;
+					case 3:
+						System.out.println("Please enter the new salary you would like for this entry: ");
+						employeeData.get(index).salary = sc.nextInt();
+						updateLoop = true;
+						break;
+					case 4:
+						System.out.println("Please enter the new hours you would like for this entry: ");
+						employeeData.get(index).hours = sc.nextInt();
+						updateLoop = true;
+						break;
+					default:
+						System.out.println("Invalid entry.");
+						wait(1000);
+				}
+
+			} catch (NumberFormatException e) {
+				System.out.println("Invalid entry. Ensure only a number is entered with no punctuation or special characters.");
+				wait(1000);
+			}
+		}
+
+		System.out.println("Entry updated!");
+		dashes();
+	}
 	
 	public static void wait(int ms) {
 		
