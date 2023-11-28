@@ -10,22 +10,23 @@ import java.util.Scanner;
  **/ 
 public class Warehouse {
 	
-	String name = ""; 						// Used when an employee's name is needed in methods.
-	Scanner sc = new Scanner(System.in); 				// Takes user input.
-	List<Employee> employeeData = new ArrayList<Employee>();	// Container for holding employee data.
+	String name = ""; // Used when an employee's name is needed in methods.
+	Scanner sc = new Scanner(System.in); // Takes user input.
+	List<Employee> employeeData = new ArrayList<Employee>(); // Container for holding employee data.
+	WarehouseDB wdb = new WarehouseDB(); // WarehouseDB object to manipulate data with.
 	
 	public static void main(String[] args) {
 		
-		Warehouse wh = new Warehouse();				// Warehouse object to call methods with.
-		boolean end = false; 					// False keeps program running, true ends program.
+		Warehouse wh = new Warehouse(); // Warehouse object to call methods with.
+		boolean end = false; // False keeps program running, true ends program.
 		
 		// Main menu loop, continues until the user enters 0, ending the program.
 		while (end == false) {
 		
 			Scanner mainSc = new Scanner(System.in);
-			int choice = 0;					// Holds choice for main menu.
-			wh.optionDisplay();				// Display main menu options.
-			choice = mainSc.nextInt();			// Get choice selection from user.
+			int choice = 0; // Holds choice for main menu.
+			wh.optionDisplay(); // Display main menu options.
+			choice = mainSc.nextInt(); // Get choice selection from user.
 			
 			// Call method based on which choice the user made, or end the program if 0 was selected.
 			switch (choice) {
@@ -70,6 +71,8 @@ public class Warehouse {
 		
 		Employee employeeInfo = new Employee(name, position, salary, hours);
 		employeeData.add(employeeInfo);
+		wdb.connect();
+		wdb.createEmployee(name, position, salary, hours);
 		System.out.println("Employee entry created!\n-----------------------");
 		wait(1500);
 	}
@@ -96,6 +99,8 @@ public class Warehouse {
 					for (int i = 0; i < employeeData.size(); i++) {
 						if (name.equalsIgnoreCase(employeeData.get(i).name)) {
 							employeeData.remove(i);
+							wdb.connect();
+							wdb.deleteEmployee(name);
 							System.out.println("Employee entry has been deleted!\n--------------------------------");
 							wait(1500);
 							break;
