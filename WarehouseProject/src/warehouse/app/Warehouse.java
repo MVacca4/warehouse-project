@@ -250,4 +250,7 @@ public class Warehouse {
 		System.out.println("2. Delete existing employee.");
 		System.out.println("3. View employee list.");
 	}
+
+	// Prints 30 dashes for readability of program and code.
+	public void dashes() {System.out.println("------------------------------");}
 }
