@@ -8,22 +8,23 @@ import java.util.Scanner;
  **/ 
 public class Warehouse {
 	
-	String name = ""; 						// Used when an employee's name is needed in methods.
-	Scanner sc = new Scanner(System.in); 				// Takes user input.
-	List<Employee> employeeData = new ArrayList<Employee>();	// Container for holding employee data.
+	String name = ""; // Used when an employee's name is needed in methods.
+	Scanner sc = new Scanner(System.in); // Takes user input.
+	List<Employee> employeeData = new ArrayList<Employee>(); // Container for holding employee data.
+	WarehouseDB wdb = new WarehouseDB(); // WarehouseDB object to manipulate data with.
 	
 	public static void main(String[] args) {
 		
-		Warehouse wh = new Warehouse();				// Warehouse object to call methods with.
-		boolean end = false; 					// False keeps program running, true ends program.
+		Warehouse wh = new Warehouse(); // Warehouse object to call methods with.
+		boolean end = false; // False keeps program running, true ends program.
 		
 		// Main menu loop, continues until the user enters 0, ending the program.
 		while (end == false) {
 		
 			Scanner mainSc = new Scanner(System.in);
-			int choice = 0;					// Holds choice for main menu.
-			wh.optionDisplay();				// Display main menu options.
-			choice = mainSc.nextInt();			// Get choice selection from user.
+			int choice = 0; // Holds choice for main menu.
+			wh.optionDisplay(); // Display main menu options.
+			choice = mainSc.nextInt(); // Get choice selection from user.
 			
 			// Call method based on which choice the user made, or end the program if 0 was selected.
 			switch (choice) {
@@ -68,8 +69,8 @@ public class Warehouse {
 		
 		Employee employeeInfo = new Employee(name, position, salary, hours);
 		employeeData.add(employeeInfo);
-		System.out.println("Employee entry created!");
-		dashes();
+		wdb.createEmployee(name, position, salary, hours);
+		System.out.println("Employee entry created!\n-----------------------");
 		wait(1500);
 	}
 	
@@ -81,8 +82,7 @@ public class Warehouse {
 		while (end == false) {
 
 			if (employeeData.size() == 0) {
-				System.out.println("The employee list currently has no entries. Returning you to the main menu.");
-				dashes();
+				System.out.println("The employee list currently has no entries. Returning you to the main menu.\n--------------------------------");
 				end = true;
 				wait(2000);
 			} else {
@@ -96,8 +96,8 @@ public class Warehouse {
 					for (int i = 0; i < employeeData.size(); i++) {
 						if (name.equalsIgnoreCase(employeeData.get(i).name)) {
 							employeeData.remove(i);
-							System.out.println("Employee entry has been deleted!");
-							dashes();
+							wdb.deleteEmployee(name);
+							System.out.println("Employee entry has been deleted!\n--------------------------------");
 							wait(1500);
 							break;
 						} else {
@@ -115,71 +115,61 @@ public class Warehouse {
 	public void viewEmployee() {
 		
 		sc = new Scanner(System.in);
+		int choice = 0;
 		boolean end = false; // For ending main while loop and going back to the main menu.
-		boolean listUpdate = false; // For ending while loop when user has to select between seeing list 
-									// of employees or choosing to update the currently selected user.
+		// For ending while loop when user has to select between seeing list of employees or choosing to update the currently selected user.
+		boolean listUpdate = false;
 		Scanner detectEnter = new Scanner(System.in);
 		
-		if (employeeData.size() == 0) {
+		if (wdb.getSize() == 0) {
 			System.out.println("There are no existing employee entries, returning you to the main menu.");
 			dashes();
 			wait(2000);
 		} else {
 			while (end == false) {
-				System.out.println("Choose between 1 and " + employeeData.size() + " to see information for the corresdponding employee:");
-				wait(1500);
-
-				// FIGURE OUT WHY LOOP REPEATS AFTER AN ENTRY HAS BEEN UPDATED.
+				System.out.println("Type the name of the employee you would like information for from the following list: ");
+				wait(1000);
 				
-				for (int i = 0; i < employeeData.size(); i++) {
-					System.out.println(i + 1 + ". " + employeeData.get(i).name);
-				}
+				wdb.viewEmployees();
+				
+				System.out.println("\nEnter 0 to go back to the main menu.");
+				name = sc.nextLine();
 				
 				try {
-					System.out.println("Enter 0 to go back to the main menu.");
-					int choice = sc.nextInt();
-					
-					if (choice == 0) {end = true;}
-					
-					for (int i = 0; i < employeeData.size(); i++) {
-						if (choice == 1 + employeeData.indexOf(employeeData.get(i))) {
-							System.out.println("Name: " + employeeData.get(i).name + "\nPosition: " + employeeData.get(i).position
-									+ "\nSalary: " + employeeData.get(i).salary + "\nHours: " + employeeData.get(i).hours);
-							wait(1500);
+					if (Integer.parseInt(name) == 0) {end = true;}
+				} catch (NumberFormatException e) {
 
-							while (listUpdate == false) {
-								System.out.println("\nEnter 0 to see the list of employees again, or 1 if you would like to update "
-								+ "this employee's information: ");
-								choice = sc.nextInt();
+					wdb.getEmployee(name);
+					wait(1000);
 
-								if (choice == 0) {
-									listUpdate = true; // Set to true so while loop ends.
-								} else if (choice == 1) {
-									updateEmployee(i); // Call updateEmployee with index of currently selected entry.
-									listUpdate = true;
-									wait(2000);
-								} else {
-									System.out.println("Invalid entry. Enter only 0 or 1.");
-									wait(1000);
-								}
-							}
+					while (listUpdate == false) {
+						System.out.println("\nEnter 0 to see the list of employees again, or 1 if you would like to update "
+						+ "this employee's information: ");
+						choice = sc.nextInt();
+
+						if (choice == 0) {
+							listUpdate = true; // Set to true so while loop ends.
+						} else if (choice == 1) {
+							updateEmployee(name); // Call updateEmployee with name of currently selected entry.
+							listUpdate = true;
+							wait(2000);
+						} else {
+							System.out.println("Invalid entry. Enter only 0 or 1.");
+							wait(1000);
 						}
 					}
-				} catch (Exception e) {
-					System.out.println("Invalid entry, please use numbers only.");
-					dashes();
-					sc = new Scanner(System.in);
-					wait(1500);
+					listUpdate = false; // Set to false so when it gets set to true after updateEmployee it doesn't stay stuck on true.
 				}
 			}
 		}
 	}
 
-	public void updateEmployee(int index) {
+	public void updateEmployee(String name) {
 
 		Scanner sc = new Scanner(System.in);
 		boolean updateLoop = false;
 		int choice;
+		String newField = "";
 
 		while (updateLoop == false) {
 			System.out.println("\nEnter the number that corresponds with the field you would like to update.\n");
@@ -190,37 +180,40 @@ public class Warehouse {
 			choice = sc.nextInt();
 			sc.nextLine();
 
-			try {
-
-				switch (choice) {
-					case 1:
-						System.out.println("Please enter the new name you would like for this entry: ");
-						employeeData.get(index).name = sc.nextLine();
+			switch (choice) {
+				case 1:
+					System.out.println("Please enter the new name you would like for this entry: ");
+					newField = sc.nextLine();
+					wdb.updateEmployee(name, newField, 1);
+					updateLoop = true;
+					break;
+				case 2:
+					System.out.println("Please enter the new position you would like for this entry: ");
+					newField = sc.nextLine();
+					wdb.updateEmployee(name, newField, 2);
+					updateLoop = true;
+					break;
+				case 3:
+					System.out.println("Please enter the new salary you would like for this entry: ");
+					newField = sc.nextLine();
+					if (wdb.updateEmployee(name, newField, 3)) {
 						updateLoop = true;
+					} else {
+						System.out.println("Ensure only numbers are entered with no spaces, punctuation, or special characters.")
 						break;
-					case 2:
-						System.out.println("Please enter the new position you would like for this entry: ");
-						employeeData.get(index).position = sc.nextLine();
+					}
+				case 4:
+					System.out.println("Please enter the new hours you would like for this entry: ");
+					newField = sc.nextLine();
+					if (wdb.updateEmployee(name, newField, 4)) {
 						updateLoop = true;
+					} else {
+						System.out.println("Ensure only numbers are entered with no spaces or special characters.");
 						break;
-					case 3:
-						System.out.println("Please enter the new salary you would like for this entry: ");
-						employeeData.get(index).salary = sc.nextInt();
-						updateLoop = true;
-						break;
-					case 4:
-						System.out.println("Please enter the new hours you would like for this entry: ");
-						employeeData.get(index).hours = sc.nextInt();
-						updateLoop = true;
-						break;
-					default:
-						System.out.println("Invalid entry.");
-						wait(1000);
-				}
-
-			} catch (NumberFormatException e) {
-				System.out.println("Invalid entry. Ensure only a number is entered with no punctuation or special characters.");
-				wait(1000);
+					}
+				default:
+					System.out.println("Invalid entry.");
+					wait(1000);
 			}
 		}
 
@@ -244,9 +237,181 @@ public class Warehouse {
 		System.out.println("0. Exit program.");
 		System.out.println("1. Create new employee.");
 		System.out.println("2. Delete existing employee.");
-		System.out.println("3. View employee list or update employee information.");
+		System.out.println("3. View employee list.");
 	}
 
 	// Prints 30 dashes for readability of program and code.
 	public void dashes() {System.out.println("------------------------------");}
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import java.sql.*;
+
+public class WarehouseDB {
+	
+	Connection connect;
+	
+	public void connect() {
+	
+		try {
+			connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/employee_data", "root", "");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void createEmployee(String name, String position, int salary, float hours) {
+		
+		connect();
+
+		try {
+			
+			String query = "insert into employees (name, position, salary, hours) values (?, ?, ?, ?)";
+			PreparedStatement prepStmt = connect.prepareStatement(query);
+			prepStmt.setString(1, name);
+			prepStmt.setString(2, position);
+			prepStmt.setInt(3, salary);
+			prepStmt.setFloat(4, hours);
+			
+			prepStmt.execute();
+			
+			connect.close();
+			
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	public void deleteEmployee(String name) {
+		
+		connect();
+
+		try {
+			
+			String query = "delete from employees where name = ?";
+			PreparedStatement prepStmt = connect.prepareStatement(query);
+			prepStmt.setString(1, name);
+			
+			prepStmt.execute();
+			
+			connect.close();
+			
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	public void viewEmployees() {
+		
+		connect();
+
+		try {
+			
+			String query = "select * from employees";
+			Statement st = connect.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			
+			while (rs.next()) {
+				String name = rs.getString("name");
+				System.out.println(name);
+			}
+			connect.close();
+			
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	public String getEmployee(String name) {
+		
+		try {
+			
+			String query = "select * from employees where name = ?";
+			PreparedStatement prepStmt = connect.prepareStatement(query);
+			prepStmt.setString(1, name);
+			
+			ResultSet rs = prepStmt.executeQuery();
+			
+			while (rs.next()) {
+				String name = rs.getString("name");
+				String position = rs.getString("position");
+				int salary = rs.getInt("salary");
+				float hours = rs.getFloat("hours");
+				
+				System.out.println("Name: " + name + "\nPosition: " + position + "\nSalary: " + salary + "\nHours: " + hours);
+			}
+			
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
+
+	public boolean updateEmployee(String name, String newField, int column) {
+
+		try {
+
+			try {
+
+				switch (column) {
+					case 1:
+						String query = "update employees set name = ? where name = ?";
+						PreparedStatement prepStmt = connect.prepareStatement(query);
+						prepStmt.setString(1, newField);
+						prepStmt.setString(2, name);
+						break;
+					case 2:
+						String query = "update employees set position = ? where name = ?";
+						PreparedStatement prepStmt = connect.prepareStatement(query);
+						prepStmt.setString(1, newField);
+						prepStmt.setString(2, name);
+						break;
+					case 3:
+						String query = "update employees set salary = ? where name = ?";
+						PreparedStatement prepStmt = connect.prepareStatement(query);
+						prepStmt.setInt(1, Integer.parseInt(newField));
+						prepStmt.setString(2, name);
+						break;
+					case 4:
+						String query = "update employees set hours = ? where name = ?";
+						PreparedStatement prepStmt = connect.prepareStatement(query);
+						prepStmt.setFloat(1, Float.parseFloat(newField));
+						prepStmt.setString(2, name);
+						break;
+					default:
+				}
+
+			} catch (NumberFormatException e) {
+				return false;
+			}
+
+		} catch (SQLException e) {
+			System.err.println("Error interacting with database." + e.getMessage());
+		}
+		return true;
+	}
+
+	public int getSize() {
+
+		connect();
+
+		int count = 0;
+
+		try {
+
+			String query = "select * from employees";
+			Statement st = connect.createStatement();
+			ResultSet rs = st.executeQuery(query);
+
+			while (rs.next()) {
+				++count;
+			}
+
+			return count;
+			connect.close();
+
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+	}
 }
