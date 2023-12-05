@@ -71,7 +71,6 @@ public class Warehouse {
 		
 		Employee employeeInfo = new Employee(name, position, salary, hours);
 		employeeData.add(employeeInfo);
-		wdb.connect();
 		wdb.createEmployee(name, position, salary, hours);
 		System.out.println("Employee entry created!\n-----------------------");
 		wait(1500);
@@ -99,7 +98,6 @@ public class Warehouse {
 					for (int i = 0; i < employeeData.size(); i++) {
 						if (name.equalsIgnoreCase(employeeData.get(i).name)) {
 							employeeData.remove(i);
-							wdb.connect();
 							wdb.deleteEmployee(name);
 							System.out.println("Employee entry has been deleted!\n--------------------------------");
 							wait(1500);
@@ -118,47 +116,118 @@ public class Warehouse {
 	
 	public void viewEmployee() {
 		
-		sc = new Scanner(System.in);
-		boolean end = false;
-		Scanner detectEnter = new Scanner(System.in);
+		int choice = 0;
+		boolean end = false; // For ending main while loop and going back to the main menu.
+		// For ending while loop when user has to select between seeing list of employees or choosing to update the currently selected user.
+		boolean listUpdate = false;
 		
-		if (employeeData.size() == 0) {
+		if (wdb.getSize() == 0) {
 			System.out.println("There are no existing employee entries, returning you to the main menu.");
-			System.out.println("--------------------------------");
+			dashes();
 			wait(2000);
 		} else {
 			while (end == false) {
-				System.out.println("Choose between 1 and " + employeeData.size() + " to see information for the corresdponding employee:");
-				wait(1500);
+				System.out.println("Type the name of the employee you would like information for from the following list:\n");
+				wait(2000);
 				
-				for (int i = 0; i < employeeData.size(); i++) {
-					System.out.println(i + 1 + ". " + employeeData.get(i).name);
-				}
+				wdb.viewEmployees();
+				
+				System.out.println("\nEnter 0 to go back to the main menu.");
+				sc = new Scanner(System.in);
+				name = sc.nextLine();
 				
 				try {
-					System.out.println("Enter 0 to go back to the main menu.");
-					int choice = sc.nextInt();
-					
-					if (choice == 0) {
-						end = true;
-					}
-					
-					for (int i = 0; i < employeeData.size(); i++) {
-						if (choice == 1 + employeeData.indexOf(employeeData.get(i))) {
-							System.out.println("Name: " + employeeData.get(i).name + "\nPosition: " + employeeData.get(i).position
-									+ "\nSalary: " + employeeData.get(i).salary + "\nHours: " + employeeData.get(i).hours);
-							wait(1500);
-							System.out.println("\nHit enter to see the list of employees again.");
-							if (detectEnter.hasNextLine()) {String s = detectEnter.nextLine();} // Detects enter key press.
+					if (Integer.parseInt(name) == 0) {end = true;}
+				} catch (NumberFormatException e) {
+
+					if (wdb.getEmployee(name)) {
+						wait(1000);
+						while (listUpdate == false) {
+							System.out.println("\nEnter 0 to see the list of employees again, or 1 if you would like to update "
+							+ "this employee's information: ");
+							choice = sc.nextInt();
+
+							if (choice == 0) {
+								listUpdate = true; // Set to true so while loop ends.
+							} else if (choice == 1) {
+								updateEmployee(name); // Call updateEmployee with name of currently selected entry.
+								listUpdate = true;
+								wait(2000);
+							} else {
+								System.out.println("Invalid entry. Enter only 0 or 1.");
+								wait(1000);
+							}
 						}
+						listUpdate = false; // Set to false so when it gets set to true after updateEmployee it doesn't stay stuck on true.
+					} else {
+						wait(500);
+						System.out.println("Hit enter to see the list of employees again: ");
+						sc.nextLine();
 					}
-				} catch (Exception e) {
-					System.out.println("Invalid entry, please use numbers only\n--------------------------------");
-					sc = new Scanner(System.in);
-					wait(1500);
 				}
 			}
 		}
+	}
+
+	public void updateEmployee(String name) {
+
+		Scanner sc = new Scanner(System.in);
+		boolean updateLoop = false;
+		int choice;
+		String newField = "";
+
+		while (updateLoop == false) {
+			System.out.println("\nEnter the number that corresponds with the field you would like to update.\n");
+			System.out.println("1. Name");
+			System.out.println("2. Position");
+			System.out.println("3. Salary");
+			System.out.println("4. Hours");
+			choice = sc.nextInt();
+			sc.nextLine();
+
+			switch (choice) {
+				case 1:
+					System.out.println("Please enter the new name you would like for this entry: ");
+					newField = sc.nextLine();
+					wdb.updateEmployee(name, newField, 1);
+					updateLoop = true;
+					break;
+				case 2:
+					System.out.println("Please enter the new position you would like for this entry: ");
+					newField = sc.nextLine();
+					wdb.updateEmployee(name, newField, 2);
+					updateLoop = true;
+					break;
+				case 3:
+					System.out.println("Please enter the new salary you would like for this entry: ");
+					newField = sc.nextLine();
+					if (wdb.updateEmployee(name, newField, 3)) {
+						updateLoop = true;
+						break;
+					} else {
+						System.out.println("Invalid entry. Ensure only numbers are entered with no spaces, "
+											+ "punctuation, or special characters.");
+						wait(3000);
+						break;
+					}
+				case 4:
+					System.out.println("Please enter the new hours you would like for this entry: ");
+					newField = sc.nextLine();
+					if (wdb.updateEmployee(name, newField, 4)) {
+						updateLoop = true;
+						break;
+					} else {
+						System.out.println("Invalid entry. Ensure only numbers are entered with no spaces or special characters.");
+						break;
+					}
+				default:
+					System.out.println("Invalid entry.");
+					wait(1000);
+			}
+		}
+		System.out.println("Entry updated!");
+		dashes();
+		
 	}
 	
 	public static void wait(int ms) {
@@ -179,4 +248,7 @@ public class Warehouse {
 		System.out.println("2. Delete existing employee.");
 		System.out.println("3. View employee list.");
 	}
+
+	// Prints 30 dashes for readability of program and code.
+	public void dashes() {System.out.println("------------------------------");}
 }
