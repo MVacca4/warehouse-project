@@ -1,19 +1,18 @@
-package warehouse.app;
+package warehouse.app; 
 
 public class Employee {
-
 	String name = "";
 	String position = "";
 	int salary = 0;
 	float hours = 0;
-	
+
 	public Employee(String name, String position, int salary, float hours) {
 		this.name = name;
 		this.position = position;
 		this.salary = salary;
 		this.hours = hours;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -38,5 +37,5 @@ public class Employee {
 	public void setHours(float hours) {
 		this.hours = hours;
 	}
-	
+
 }
