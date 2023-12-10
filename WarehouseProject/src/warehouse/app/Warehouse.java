@@ -1,7 +1,5 @@
 package warehouse.app;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -12,7 +10,6 @@ public class Warehouse {
 	
 	String name = ""; // Used when an employee's name is needed in methods.
 	Scanner sc = new Scanner(System.in); // Takes user input.
-	List<Employee> employeeData = new ArrayList<Employee>(); // Container for holding employee data.
 	WarehouseDB wdb = new WarehouseDB(); // WarehouseDB object to manipulate data with.
 	
 	public static void main(String[] args) {
@@ -69,10 +66,9 @@ public class Warehouse {
 			hours = Float.parseFloat(sc.nextLine());
 		} catch (NumberFormatException e) {hours = 0;} // Assign default value of 0.
 		
-		Employee employeeInfo = new Employee(name, position, salary, hours);
-		employeeData.add(employeeInfo);
 		wdb.createEmployee(name, position, salary, hours);
-		System.out.println("Employee entry created!\n-----------------------");
+		System.out.println("Employee entry created!");
+		dashes();
 		wait(1500);
 	}
 	
@@ -83,8 +79,9 @@ public class Warehouse {
 		
 		while (end == false) {
 
-			if (employeeData.size() == 0) {
-				System.out.println("The employee list currently has no entries. Returning you to the main menu.\n--------------------------------");
+			if (wdb.getSize() == 0) {
+				System.out.println("The employee list currently has no entries. Returning you to the main menu.");
+				dashes();
 				end = true;
 				wait(2000);
 			} else {
@@ -94,20 +91,10 @@ public class Warehouse {
 				try {
 					if (Integer.parseInt(name) == 0) {end = true;} // If user entered 0, end while loop.
 				} catch (NumberFormatException e) {
-					// Loop through all employee entries and delete an entry if it matches the name typed.
-					for (int i = 0; i < employeeData.size(); i++) {
-						if (name.equalsIgnoreCase(employeeData.get(i).name)) {
-							employeeData.remove(i);
-							wdb.deleteEmployee(name);
-							System.out.println("Employee entry has been deleted!\n--------------------------------");
-							wait(1500);
-							break;
-						} else {
-							if (i == employeeData.size() - 1) {	// Display message if loop has gotten to last employee entry.
-								System.out.println("Sorry, that employee name doesn't match any in our records. Please ensure you entered the name correctly.\n");
-								wait(1500);
-							}
-						}
+					if (wdb.deleteEmployee(name)) {
+						System.out.println("Employee entry has been deleted!");
+						dashes();
+						wait(1000);
 					}
 				}
 			}
