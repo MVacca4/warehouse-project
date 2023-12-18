@@ -7,13 +7,11 @@ import java.util.Scanner;
  * @author Massimiliano Vacca
  **/ 
 public class Warehouse {
-
     String name = ""; // Used when an employee's name is needed in methods.
     Scanner sc = new Scanner(System.in); // Takes user input.
     WarehouseDB wdb = new WarehouseDB(); // WarehouseDB object to manipulate data with.
 
     public static void main(String[] args) {
-
         Warehouse wh = new Warehouse(); // Warehouse object to call methods with.
         boolean end = false; // False keeps program running, true ends program.
 
@@ -45,7 +43,6 @@ public class Warehouse {
     }
 
     public void createEmployee() {
-
         sc = new Scanner(System.in);
         int salary = 0;
         float hours = 0;
@@ -73,7 +70,6 @@ public class Warehouse {
     }
 
     public void deleteEmployee() {
-
         sc = new Scanner(System.in);
         boolean end = false;
 
@@ -102,7 +98,6 @@ public class Warehouse {
     }    
 
     public void viewEmployee() {
-
         int choice = 0;
         boolean end = false; // For ending main while loop and going back to the main menu.
         // For ending while loop when user has to select between seeing list of employees or choosing to update the currently selected user.
@@ -157,7 +152,6 @@ public class Warehouse {
     }
 
     public void updateEmployee(String name) {
-
         Scanner sc = new Scanner(System.in);
         boolean updateLoop = false;
         int choice;
