@@ -9,25 +9,23 @@ import java.util.Scanner;
  * @author Massimiliano Vacca
  **/ 
 public class Warehouse {
-	
 	String name = ""; // Used when an employee's name is needed in methods.
 	Scanner sc = new Scanner(System.in); // Takes user input.
 	List<Employee> employeeData = new ArrayList<Employee>(); // Container for holding employee data.
 	WarehouseDB wdb = new WarehouseDB(); // WarehouseDB object to manipulate data with.
-	
+
 	public static void main(String[] args) {
-		
 		Warehouse wh = new Warehouse(); // Warehouse object to call methods with.
 		boolean end = false; // False keeps program running, true ends program.
-		
+
 		// Main menu loop, continues until the user enters 0, ending the program.
 		while (end == false) {
-		
+
 			Scanner mainSc = new Scanner(System.in);
 			int choice = 0; // Holds choice for main menu.
 			wh.optionDisplay(); // Display main menu options.
 			choice = mainSc.nextInt(); // Get choice selection from user.
-			
+
 			// Call method based on which choice the user made, or end the program if 0 was selected.
 			switch (choice) {
 				case 0:
@@ -46,19 +44,18 @@ public class Warehouse {
 			}
 		}
 	}
-	
+
 	public void createEmployee() {
-		
 		sc = new Scanner(System.in);
 		int salary = 0;
 		float hours = 0;
-	
+
 		System.out.println("Fill in the following questions, if the answer is unknown leave the field blank.");
 		System.out.print("Enter employee's name: ");
 		name = sc.nextLine();
 		System.out.print("Enter employee's position: ");
 		String position = sc.nextLine();
-		
+
 		// Surround with try...catch in case user enters nothing for salary or hours.
 		try {
 			System.out.print("Enter employee's salary, no spaces, no commas: ");
@@ -75,12 +72,11 @@ public class Warehouse {
 		System.out.println("Employee entry created!\n-----------------------");
 		wait(1500);
 	}
-	
+
 	public void deleteEmployee() {
-		
 		sc = new Scanner(System.in);
 		boolean end = false;
-		
+
 		while (end == false) {
 
 			if (employeeData.size() == 0) {
@@ -90,7 +86,7 @@ public class Warehouse {
 			} else {
 				System.out.println("Enter the name of the employee you wish to delete, or enter 0 to go back to the main menu: ");
 				name = sc.nextLine();
-				
+
 				try {
 					if (Integer.parseInt(name) == 0) {end = true;} // If user entered 0, end while loop.
 				} catch (NumberFormatException e) {
@@ -113,14 +109,13 @@ public class Warehouse {
 			}
 		}
 	}	
-	
+
 	public void viewEmployee() {
-		
 		int choice = 0;
 		boolean end = false; // For ending main while loop and going back to the main menu.
 		// For ending while loop when user has to select between seeing list of employees or choosing to update the currently selected user.
 		boolean listUpdate = false;
-		
+
 		if (wdb.getSize() == 0) {
 			System.out.println("There are no existing employee entries, returning you to the main menu.");
 			dashes();
@@ -129,13 +124,13 @@ public class Warehouse {
 			while (end == false) {
 				System.out.println("Type the name of the employee you would like information for from the following list:\n");
 				wait(2000);
-				
+
 				wdb.viewEmployees();
-				
+
 				System.out.println("\nEnter 0 to go back to the main menu.");
 				sc = new Scanner(System.in);
 				name = sc.nextLine();
-				
+
 				try {
 					if (Integer.parseInt(name) == 0) {end = true;}
 				} catch (NumberFormatException e) {
@@ -170,7 +165,6 @@ public class Warehouse {
 	}
 
 	public void updateEmployee(String name) {
-
 		Scanner sc = new Scanner(System.in);
 		boolean updateLoop = false;
 		int choice;
@@ -227,20 +221,20 @@ public class Warehouse {
 		}
 		System.out.println("Entry updated!");
 		dashes();
-		
+
 	}
-	
+
 	public static void wait(int ms) {
-		
+
 		try {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
 	}
-	
+
 	public void optionDisplay() {
-		
+
 		System.out.print("Welcome to the warehouse database system. ");
 		System.out.println("Please type the corresponding number of your choice and hit enter:\n");
 		System.out.println("0. Exit program.");

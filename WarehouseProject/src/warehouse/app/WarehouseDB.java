@@ -2,7 +2,7 @@ import java.sql.*;
 
 public class WarehouseDB {
 	private Connection connect;
-	
+
 	public void createEmployee(String name, String position, int salary, float hours) {
 		connect();
 
@@ -15,12 +15,12 @@ public class WarehouseDB {
 			prepStmt.setFloat(4, hours);
 			prepStmt.execute();
 			connect.close();
-			
+
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	public void deleteEmployee(String name) {
 		connect();
 
@@ -35,7 +35,7 @@ public class WarehouseDB {
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	public void viewEmployees() {
 		connect();
 
@@ -43,26 +43,26 @@ public class WarehouseDB {
 			String query = "select * from employees";
 			Statement st = connect.createStatement();
 			ResultSet rs = st.executeQuery(query);
-			
+
 			while (rs.next()) {
 				String name = rs.getString("name");
 				System.out.println(name);
 			}
 			connect.close();
-			
+
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 	}
-	
+
 	public String getEmployee(String name) {
-		
+
 		try {
 			String query = "select * from employees where name = ?";
 			PreparedStatement prepStmt = connect.prepareStatement(query);
 			prepStmt.setString(1, name);
 			ResultSet rs = prepStmt.executeQuery();
-			
+
 			while (rs.next()) {
 				String name = rs.getString("name");
 				String position = rs.getString("position");
