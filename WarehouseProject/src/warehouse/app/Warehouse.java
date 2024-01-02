@@ -9,12 +9,20 @@ import java.util.Scanner;
  * @author Massimiliano Vacca
  **/ 
 public class Warehouse {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5327030684e941b55bbaf27961034a7ad9a84cc8
 	String name = ""; // Used when an employee's name is needed in methods.
 	Scanner sc = new Scanner(System.in); // Takes user input.
 	List<Employee> employeeData = new ArrayList<Employee>(); // Container for holding employee data.
 	WarehouseDB wdb = new WarehouseDB(); // WarehouseDB object to manipulate data with.
 
 	public static void main(String[] args) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5327030684e941b55bbaf27961034a7ad9a84cc8
 		Warehouse wh = new Warehouse(); // Warehouse object to call methods with.
 		boolean end = false; // False keeps program running, true ends program.
 
@@ -46,6 +54,10 @@ public class Warehouse {
 	}
 
 	public void createEmployee() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5327030684e941b55bbaf27961034a7ad9a84cc8
 		sc = new Scanner(System.in);
 		int salary = 0;
 		float hours = 0;
@@ -74,6 +86,10 @@ public class Warehouse {
 	}
 
 	public void deleteEmployee() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5327030684e941b55bbaf27961034a7ad9a84cc8
 		sc = new Scanner(System.in);
 		boolean end = false;
 
@@ -111,6 +127,10 @@ public class Warehouse {
 	}	
 
 	public void viewEmployee() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5327030684e941b55bbaf27961034a7ad9a84cc8
 		int choice = 0;
 		boolean end = false; // For ending main while loop and going back to the main menu.
 		// For ending while loop when user has to select between seeing list of employees or choosing to update the currently selected user.
