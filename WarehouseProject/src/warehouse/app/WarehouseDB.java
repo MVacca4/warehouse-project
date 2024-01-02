@@ -1,5 +1,3 @@
-package warehouse.app;
-
 import java.sql.*;
 
 public class WarehouseDB {
