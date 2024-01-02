@@ -1,7 +1,6 @@
-package warehouse.app;
+package warehouse.app; 
 
 public class Employee {
-
 	String name = "";
 	String position = "";
 	int salary = 0;
